@@ -1,0 +1,25 @@
+{
+  "name": "comms-aggregator-buncha",
+  "version": "1.0.0",
+  "description": "Communication Aggregator system with microservices architecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pshri5/comms-aggregator-buncha.git"
+  },
+  "keywords": [],
+  "author": "Preetam Shri",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/pshri5/comms-aggregator-buncha/issues"
+  },
+  "homepage": "https://github.com/pshri5/comms-aggregator-buncha#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0"
+  }
+}
