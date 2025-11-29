@@ -36,5 +36,21 @@ const messageSchema = new Schema({
         enum: ["Pending","Delivered","failed"],
         default: "Pending"
     },
-
+    attempts:{
+        type: Number,
+        default: 0, 
+    },
+    lastAttempt:{
+        type: Date
+    },
+    
 },{timestamps:true})
+
+//create indexes
+messageSchema.index({ 'content.recipient': 1, 'content.body': 1, channel: 1, createdAt: 1 });
+messageSchema.index({ status: 1, attempts: 1 });
+messageSchema.index({ id: 1 }, { unique: true });
+
+const Message = mongoose.model("Message", messageSchema)
+
+export default Message

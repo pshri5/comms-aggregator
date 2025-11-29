@@ -19,8 +19,14 @@
   },
   "homepage": "https://github.com/pshri5/comms-aggregator-buncha#readme",
   "dependencies": {
+    "amqplib": "^0.10.9",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mongoose": "^9.0.0"
+    "joi": "^18.0.2",
+    "mongoose": "^9.0.0",
+    "uuid": "^13.0.0",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
     "prettier": "^3.7.1"
