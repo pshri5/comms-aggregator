@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  task-router:
+    build: ./task-router-service
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongo:27017/task-router
+      - RABBITMQ_URI=amqp://rabbitmq
+    depends_on:
+      - mongo
+      - rabbitmq
+    restart: always
+    volumes:
+      - ./task-router-service:/app
+      - /app/node_modules
+
+  delivery-service:
+    build: ./delivery-service
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/delivery-service
+      - RABBITMQ_URI=amqp://rabbitmq
+    depends_on:
+      - mongo
+      - rabbitmq
+    restart: always
+    volumes:
+      - ./delivery-service:/app
+      - /app/node_modules
+
+  logging-service:
+    build: ./logging-service
+    environment:
+      - RABBITMQ_URI=amqp://rabbitmq
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+    restart: always
+    volumes:
+      - ./logging-service:/app
+      - /app/node_modules
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=comms-aggregator
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mongo-data:
+  rabbitmq-data:
+  elasticsearch-data:

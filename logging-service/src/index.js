@@ -1,49 +1,29 @@
-import express from 'express';
-import cors from 'cors';
+// logging-service/src/index.js
 import dotenv from 'dotenv';
-import { connectDB } from '../../task-router-service/src/db/dbConfig.js';
-import deliveryRoutes from '../../routes/delivery.routes.js';
-import { errorHandler } from '../../middleware/errorHandler.js';
 import { initializeQueue } from '../../services/queue.service.js';
-import logger from '../../task-router-service/src/utils/logger.js';
+import logger from './utils/logger.js';
+import { startLogConsumer } from './services/log.service.js';
+import { connectElasticsearch } from './db/elasticsearch.js';
 
 // Load environment variables
 dotenv.config();
 
-// Create Express app
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Routes
-app.use('/api/delivery', deliveryRoutes);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', service: 'delivery-service' });
-});
-
-// Error handling middleware
-app.use(errorHandler);
-
 // Initialize the app
 async function startServer() {
   try {
-    // Connect to MongoDB
-    await connectDB();
-    logger.info('Connected to MongoDB');
+    // Connect to Elasticsearch
+    await connectElasticsearch();
+    logger.info('Connected to Elasticsearch');
 
-    // Initialize RabbitMQ connections and consumers
+    // Initialize RabbitMQ connections
     await initializeQueue();
-    logger.info('Connected to RabbitMQ and consumers started');
+    logger.info('Connected to RabbitMQ');
 
-    // Start the server
-    app.listen(PORT, () => {
-      logger.info(`Delivery Service running on port ${PORT}`);
-    });
+    // Start log consumers
+    await startLogConsumer();
+    logger.info('Log consumer started');
+
+    logger.info('Logging Service started successfully');
   } catch (error) {
     logger.error('Failed to start server:', error);
     process.exit(1);

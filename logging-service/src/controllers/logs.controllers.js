@@ -1,4 +1,4 @@
-import { getLogsByTraceId, getLogStats } from '../services/logs.service.js';
+import { getLogsByTraceId, getLogStats } from '../services/log.service.js';
 import { searchLogs } from '../services/elasticsearch.service.js';
 import logger from '../utils/logger.js';
 
