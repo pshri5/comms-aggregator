@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import Message from '../models/message.model.js';
+import Message from '../task-router-service/src/models/message.model.js';
 import { publishToChannel } from './queue.service.js';
 import config from '../config/config.js';
 import logger from '../utils/logger.js';

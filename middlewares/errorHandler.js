@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js';
+import logger from '../task-router-service/src/utils/logger.js';
 
 export const errorHandler = (err, req, res, next) => {
   // Log the error
