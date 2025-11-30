@@ -1,5 +1,5 @@
 import amqp from 'amqplib';
-import config from '../config/config.js';
+import config from '../task-router-service/src/config/config.js';
 import logger from '../utils/logger.js';
 
 let connection = null;

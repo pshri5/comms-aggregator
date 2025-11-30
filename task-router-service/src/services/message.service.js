@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import Message from '../task-router-service/src/models/message.model.js';
 import { publishToChannel } from './queue.service.js';
-import config from '../config/config.js';
+import config from '../task-router-service/src/config/config.js';
 import logger from '../utils/logger.js';
 
 // Process and route a new message

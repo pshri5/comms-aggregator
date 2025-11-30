@@ -1,0 +1,25 @@
+// delivery-service/package.json
+{
+  "name": "delivery-service",
+  "version": "1.0.0",
+  "description": "Service to handle message delivery for different channels",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Preetam Shri",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "amqplib": "^0.10.9",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "joi": "^18.0.2",
+    "mongoose": "^9.0.0",
+    "uuid": "^13.0.0",
+    "winston": "^3.18.3"
+  }
+}
