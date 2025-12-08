@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import Message from '../task-router-service/src/models/message.model.js';
+import Message from '../models/message.model.js';
 import { publishToChannel } from './queue.service.js';
-import config from '../task-router-service/src/config/config.js';
+import config from '../config/config.js';
 import logger from '../utils/logger.js';
 
 // Process and route a new message
@@ -19,11 +19,11 @@ export async function processMessage(messageData) {
     });
 
     if (existingMessage) {
-      logger.info('Duplicate message detected', { 
-        traceId, 
-        messageId: existingMessage.id 
+      logger.info('Duplicate message detected', {
+        traceId,
+        messageId: existingMessage.id
       });
-      
+
       return existingMessage;
     }
 
@@ -38,10 +38,10 @@ export async function processMessage(messageData) {
     });
 
     await message.save();
-    logger.info('Message saved to database', { 
-      traceId, 
-      messageId, 
-      channel 
+    logger.info('Message saved to database', {
+      traceId,
+      messageId,
+      channel
     });
 
     // Publish to the appropriate queue
@@ -49,9 +49,9 @@ export async function processMessage(messageData) {
 
     return message;
   } catch (error) {
-    logger.error('Error processing message', { 
-      traceId, 
-      error: error.message 
+    logger.error('Error processing message', {
+      traceId,
+      error: error.message
     });
     throw error;
   }
@@ -78,19 +78,19 @@ export async function publishMessage(message) {
       queueMessage
     );
 
-    logger.info('Message published to queue', { 
-      traceId, 
-      messageId: id, 
-      channel, 
-      queue: `${channel}_queue` 
+    logger.info('Message published to queue', {
+      traceId,
+      messageId: id,
+      channel,
+      queue: `${channel}_queue`
     });
 
     return true;
   } catch (error) {
-    logger.error('Error publishing message to queue', { 
-      traceId: message.traceId, 
-      messageId: message.id, 
-      error: error.message 
+    logger.error('Error publishing message to queue', {
+      traceId: message.traceId,
+      messageId: message.id,
+      error: error.message
     });
     throw error;
   }
@@ -105,7 +105,7 @@ export async function getMessageById(id) {
 export async function processRetries() {
   try {
     const { maxAttempts } = config.retryConfig;
-    
+
     // Find messages to retry (failed status, attempts < max)
     const messagesToRetry = await Message.find({
       status: 'failed',
@@ -143,7 +143,7 @@ export async function processRetries() {
 // Start the retry service
 export function startRetryService() {
   const { checkInterval } = config.retryConfig;
-  
+
   // Setup interval to check for failed messages
   setInterval(async () => {
     try {
@@ -152,6 +152,6 @@ export function startRetryService() {
       logger.error('Retry service error', { error: error.message });
     }
   }, checkInterval);
-  
+
   logger.info(`Retry service started, checking every ${checkInterval}ms`);
 }

@@ -54,7 +54,7 @@ export const getClient = () => {
 export const indexLog = async (logData) => {
   try {
     const client = getClient();
-    
+
     await client.index({
       index: 'service-logs',
       body: {
@@ -65,7 +65,7 @@ export const indexLog = async (logData) => {
 
     return true;
   } catch (error) {
-    logger.error('Failed to index log in Elasticsearch', { 
+    logger.error('Failed to index log in Elasticsearch', {
       error: error.message,
       logData
     });
@@ -76,7 +76,7 @@ export const indexLog = async (logData) => {
 export const searchLogs = async (query, from = 0, size = 50) => {
   try {
     const client = getClient();
-    
+
     const result = await client.search({
       index: 'service-logs',
       body: {
@@ -87,9 +87,9 @@ export const searchLogs = async (query, from = 0, size = 50) => {
       }
     });
 
-    return result.body.hits.hits.map(hit => hit._source);
+    return result.hits.hits.map(hit => hit._source);
   } catch (error) {
-    logger.error('Failed to search logs in Elasticsearch', { 
+    logger.error('Failed to search logs in Elasticsearch', {
       error: error.message,
       query
     });

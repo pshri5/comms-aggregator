@@ -1,50 +1,50 @@
-import mongoose,{Schema} from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 const messageSchema = new Schema({
-    id:{
+    id: {
         type: String,
         required: true,
         unique: true
     },
-    traceId:{
+    traceId: {
         type: String,
         required: true
     },
-    channel:{
+    channel: {
         type: String,
         required: true,
-        enum: ["email","whatsapp","sms"]
+        enum: ["email", "whatsapp", "sms"]
     },
-    content:{
-       recipient: { 
-      type: String, 
-      required: true 
+    content: {
+        recipient: {
+            type: String,
+            required: true
+        },
+        subject: {
+            type: String,
+            required: function () {
+                return this.channel === 'email';
+            }
+        },
+        body: {
+            type: String,
+            required: true
+        }
     },
-    subject: { 
-      type: String,
-      required: function() { 
-        return this.channel === 'email'; 
-      } 
-    },
-    body :{
+    status: {
         type: String,
-        required: true
-    }
+        enum: ["pending", "delivered", "failed"],
+        default: "pending"
     },
-    status:{
-        type: String,
-        enum: ["Pending","Delivered","failed"],
-        default: "Pending"
-    },
-    attempts:{
+    attempts: {
         type: Number,
-        default: 0, 
+        default: 0,
     },
-    lastAttempt:{
+    lastAttempt: {
         type: Date
     },
-    
-},{timestamps:true})
+
+}, { timestamps: true })
 
 //create indexes
 messageSchema.index({ 'content.recipient': 1, 'content.body': 1, channel: 1, createdAt: 1 });

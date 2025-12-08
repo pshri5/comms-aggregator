@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import Delivery from '../models/delivery.model.js';
-import { consumeFromQueue, sendToQueue, getChannel } from '../../../services/queue.service.js';
+import { consumeFromQueue, sendToQueue, getChannel } from './queue.service.js';
 import logger from '../utils/logger.js';
 
 // Simulate sending a message through a specific channel

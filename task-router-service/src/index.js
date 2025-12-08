@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './db/dbConfig.js';
-import messageRoutes from './routes/message.routes.js';
-import { errorHandler } from './middleware/errorHandler.js';
+import connectDB from './db/dbConfig.js';
+import messageRoutes from './routes/message.route.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 import { initializeQueue } from './services/queue.service.js';
 import logger from './utils/logger.js';
 import { startRetryService } from './services/message.service.js';

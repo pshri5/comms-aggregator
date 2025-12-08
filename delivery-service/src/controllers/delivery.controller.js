@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import Delivery from '../models/delivery.model.js';
-import { consumeFromQueue, sendToQueue, getChannel } from '../../../services/queue.service.js';
+import { consumeFromQueue, sendToQueue, getChannel } from '../services/queue.service.js';
 import logger from '../utils/logger.js';
 
 // Simulate sending a message through a specific channel
@@ -132,4 +132,74 @@ export const getDeliveryByMessageId = async (messageId) => {
 // Get deliveries by status
 export const getDeliveriesByStatus = async (status) => {
   return await Delivery.find({ status });
+};
+
+// Get a single delivery by ID
+export const getDelivery = async (req, res, next) => {
+  try {
+    const delivery = await getDeliveryByMessageId(req.params.id);
+    
+    if (!delivery) {
+      return res.status(404).json({
+        success: false,
+        error: 'Delivery not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      delivery
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get multiple deliveries with optional filtering
+export const getDeliveries = async (req, res, next) => {
+  try {
+    const { status } = req.query;
+    let deliveries;
+    
+    if (status) {
+      deliveries = await getDeliveriesByStatus(status);
+    } else {
+      deliveries = await Delivery.find({}).sort({ createdAt: -1 });
+    }
+    
+    res.json({
+      success: true,
+      count: deliveries.length,
+      data: deliveries
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get delivery statistics
+export const getStats = async (req, res, next) => {
+  try {
+    // Get counts by status and channel
+    const stats = {
+      total: await Delivery.countDocuments(),
+      byStatus: {
+        pending: await Delivery.countDocuments({ status: 'pending' }),
+        delivered: await Delivery.countDocuments({ status: 'delivered' }),
+        failed: await Delivery.countDocuments({ status: 'failed' })
+      },
+      byChannel: {
+        email: await Delivery.countDocuments({ channel: 'email' }),
+        sms: await Delivery.countDocuments({ channel: 'sms' }),
+        whatsapp: await Delivery.countDocuments({ channel: 'whatsapp' })
+      }
+    };
+    
+    res.json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    next(error);
+  }
 };

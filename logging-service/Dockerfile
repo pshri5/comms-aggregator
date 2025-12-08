@@ -4,21 +4,15 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY logging-service/package*.json ./task-router-service/
 
 # Install dependencies
-RUN npm install --production
-RUN cd logging-service && npm install --production
+RUN npm install
 
 # Copy source code
-COPY ./services ./services
-COPY logging-service ./task-router-service
-
-# Set working directory to the service folder
-WORKDIR /app/logging-service
+COPY . .
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3002
 
 # Start the service
 CMD ["node", "src/index.js"]

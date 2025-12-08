@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   task-router:
     build: ./task-router-service
@@ -55,7 +53,7 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"   # AMQP port
+      - "5672:5672" # AMQP port
       - "15672:15672" # Management UI
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
@@ -74,7 +72,7 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -88,7 +86,7 @@ services:
     depends_on:
       - elasticsearch
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5601"]
+      test: [ "CMD", "curl", "-f", "http://localhost:5601" ]
       interval: 30s
       timeout: 10s
       retries: 5

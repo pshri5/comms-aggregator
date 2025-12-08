@@ -10,7 +10,7 @@ export const messageSchema = Joi.object({
       'any.required': 'Channel is required',
       'any.only': 'Channel must be one of: email, sms, whatsapp'
     }),
-  
+
   content: Joi.object({
     recipient: Joi.string()
       .required()
@@ -18,7 +18,18 @@ export const messageSchema = Joi.object({
         'string.base': 'Recipient must be a string',
         'any.required': 'Recipient is required'
       }),
-    
-    subject: Joi
-  })
-})
+
+    subject: Joi.string()
+      .optional()
+      .messages({
+        'string.base': 'Subject must be a string'
+      }),
+
+    body: Joi.string()
+      .required()
+      .messages({
+        'string.base': 'Body must be a string',
+        'any.required': 'Body is required'
+      })
+  }).required()
+});

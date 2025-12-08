@@ -3,8 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './db/dbConfig.js';
 import deliveryRoutes from './routes/delivery.routes.js';
-import { errorHandler } from './middleware/errorHandler.js';
-import { initializeQueue } from '../../services/queue.service.js';
+import { errorHandler } from './utils/errorHandler.js';
+import { initializeQueue } from './services/queue.service.js';
 import logger from './utils/logger.js';
 import { startDeliveryConsumers } from './services/delivery.service.js';
 

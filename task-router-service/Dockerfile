@@ -4,18 +4,12 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY task-router-service/package*.json ./task-router-service/
 
 # Install dependencies
-RUN npm install --production
-RUN cd task-router-service && npm install --production
+RUN npm install
 
 # Copy source code
-COPY ./services ./services
-COPY task-router-service ./task-router-service
-
-# Set working directory to the service folder
-WORKDIR /app/task-router-service
+COPY . .
 
 # Expose port
 EXPOSE 3000
