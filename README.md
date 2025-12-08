@@ -48,8 +48,8 @@ The system uses RabbitMQ for asynchronous communication between services for the
 ### Start the Services
 1. Clone the repository:
 ```
-git clone https://github.com/pshri5/comms-aggregator-buncha.git
-cd comms-aggregator-buncha
+git clone https://github.com/pshri5/comms-aggregator.git
+cd comms-aggregator
 ```
 2. Start all services:
 ```
