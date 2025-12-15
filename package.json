@@ -1,5 +1,5 @@
 {
-  "name": "comms-aggregator-buncha",
+  "name": "comms-aggregator",
   "version": "1.0.0",
   "description": "Communication Aggregator system with microservices architecture",
   "main": "index.js",
